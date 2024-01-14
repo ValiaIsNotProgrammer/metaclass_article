@@ -1,9 +1,10 @@
 import threading
 
-from peer import Peer
+from logger.components.session_logger import SessionLoggingMetaclass
+from peer.peer import Peer
 
 
-class Session:
+class Session(metaclass=SessionLoggingMetaclass):
 
     def __init__(self, peer: Peer):
         self.peer: Peer = peer
@@ -31,13 +32,13 @@ class Session:
 
     def to_command(self, input_) -> None:
         if self.is_command(input_):
-            return self.parse_command(input_)
+            return self.__parse_command(input_)
         print("Invalid command. Available commands: {}".format(self.commands.keys()))
 
     def is_command(self, command):
         return command.split()[0] in self.commands
 
-    def parse_command(self, input_):
+    def __parse_command(self, input_):
         split_input = input_.split()
         command = split_input[0]
         if len(split_input) > 1:
