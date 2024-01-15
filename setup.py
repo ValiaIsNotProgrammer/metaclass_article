@@ -37,7 +37,6 @@ class CMDLine(metaclass=SetupLoggingMetaclass):
         return args.__dict__
 
 
-
 if __name__ == "__main__":
     cmdline = CMDLine()
     cmdline.setup()

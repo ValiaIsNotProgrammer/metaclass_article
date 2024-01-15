@@ -1,8 +1,10 @@
 import logging
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 
-class BaseLoggingMetaclass(type):
+class BaseLoggingMetaclass(type, ABC):
+
+    logging_method_endswith = {}
 
     def __new__(cls, name, bases, dct):
         for method_name, method in dct.items():
@@ -21,13 +23,16 @@ class BaseLoggingMetaclass(type):
         return wrapper
 
     @classmethod
-    @abstractmethod
     def _get_log_decorator(cls, method_name):
-        return cls.base_logging
+        #TODO: сделать вложение. Если method_name есть в ключе, то вернуть ключ
+        matching_key = cls.__get_key_from_method_name(method_name)
+        return cls.logging_method_endswith.get(matching_key, cls.base_logging)
 
-
-class BaseLoggingMethodMixin:
-    def __init__(self):
-        pass
+    @classmethod
+    def __get_key_from_method_name(cls, method_name):
+        for k in cls.logging_method_endswith.keys():
+            if k in method_name:
+                return k
+        return method_name
 
 
