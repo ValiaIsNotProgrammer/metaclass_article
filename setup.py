@@ -23,11 +23,14 @@ class CMDLine(metaclass=SetupLoggingMetaclass):
         self.__add_arguments()
 
     def setup(self):
-        commands = self.__parse_command()
-        peer = Peer("localhost", commands["port"])
-        session = Session(peer)
-        session.setup()
-        peer.setup()
+        try:
+            commands = self.__parse_command()
+            peer = Peer("localhost", commands["port"])
+            session = Session(peer)
+            session.setup()
+            peer.setup()
+        except Exception as e:
+            return e
 
     def __add_arguments(self):
         self.parser.add_argument("-p", "--port", type=int, help="Set port for your peer")

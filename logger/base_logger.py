@@ -22,6 +22,9 @@ class BaseLoggingMetaclass(type, ABC):
             return result
         return wrapper
 
+
+    # def hangle_exception(self):
+    #     if isinstance(result, Exception):
     @classmethod
     def _get_log_decorator(cls, method_name):
         #TODO: сделать вложение. Если method_name есть в ключе, то вернуть ключ

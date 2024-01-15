@@ -33,7 +33,6 @@ class Session(metaclass=SessionLoggingMetaclass):
     def to_command(self, input_) -> None:
         if self.is_command(input_):
             return self.__parse_command(input_)
-        print("Invalid command. Available commands: {}".format(self.commands.keys()))
 
     def is_command(self, command):
         return command.split()[0] in self.commands

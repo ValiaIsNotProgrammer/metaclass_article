@@ -22,10 +22,12 @@ class Peer(metaclass=PeerLoggingMetaclass):
         thread_2.start()
 
     def connect(self, port):
-        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client_socket.connect((self.host, port))
-        print("Connected to server {}".format(port))
-        self.__start_connection(client_socket)
+        try:
+            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            client_socket.connect((self.host, port))
+            self.__start_connection(client_socket)
+        except Exception as e:
+            return e
 
     def send_peer(self, message, port):
         connection = self.__get_connection_from_port(int(port))
@@ -47,11 +49,9 @@ class Peer(metaclass=PeerLoggingMetaclass):
 
     def __start_accept_connections(self):
         while True:
-            print("waiting for connection...")
             client_socket, address = self.server_socket.accept()
             connection = Connection(client_socket)
             self.connections.append(connection)
-            print(f"New connection from {address}")
 
     def __get_connection_from_port(self, port: int):
         for conn in self.connections:
@@ -60,7 +60,9 @@ class Peer(metaclass=PeerLoggingMetaclass):
                 return conn
 
     def close(self):
-        self.server_socket.close()
-        print("peer closed")
+        try:
+            self.server_socket.close()
+        except Exception as e:
+            return e
 
 
